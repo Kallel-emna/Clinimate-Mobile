@@ -43,7 +43,7 @@ public class categoryService {
     public void addCategory(productCategory category) {
         String name = category.getName();
         
-        String url = Statics.BASE_URL + "addJSON/new?nom_cat=" + name;
+        String url = Statics.BASE_URL + "/addJSON/new?nom_cat=" + name;
         req.setUrl(url);
         req.addResponseListener((e) -> {
             String str = new String(req.getResponseData());
@@ -54,25 +54,26 @@ public class categoryService {
     }
 
     public boolean deleteCategory(int id) {
-        String url = Statics.BASE_URL + "deleteJSON?id=" + id ;
+    String url = Statics.BASE_URL + "/deleteJSON/" + id;
 
-        req.setUrl(url);
-        req.setPost(false);
-        req.setFailSilently(true);
-        req.addResponseListener(new ActionListener<NetworkEvent>() {
-            @Override
-            public void actionPerformed(NetworkEvent evt) {
-                resultat = req.getResponseCode() == 200;
-                req.removeResponseListener(this);
-            }
+    req.setUrl(url);
+    req.setPost(false);
+    req.setFailSilently(true);
+    req.addResponseListener(new ActionListener<NetworkEvent>() {
+        @Override
+        public void actionPerformed(NetworkEvent evt) {
+            resultat = req.getResponseCode() == 200;
+            req.removeResponseListener(this);
+        }
 
-        });
-        NetworkManager.getInstance().addToQueueAndWait(req);
-        return resultat;
-    }
+    });
+    NetworkManager.getInstance().addToQueueAndWait(req);
+    return resultat;
+}
+
 
     public void editCategory(productCategory category) {
-        String url = Statics.BASE_URL + "updateJSON?id=" + category.getId();
+        String url = Statics.BASE_URL + "/updateJSON/" + category.getId() + "?nom_cat=" + category.getName();
         req.setUrl(url);
         req.addResponseListener((e) -> {
 
@@ -86,7 +87,7 @@ public class categoryService {
     public ArrayList<productCategory> showCategory() {
         ArrayList<productCategory> result = new ArrayList<>();
 
-        String url = Statics.BASE_URL + "allJSON";
+        String url = Statics.BASE_URL + "/allJSON";
         req.setUrl(url);
 
         req.addResponseListener(new ActionListener<NetworkEvent>() {
